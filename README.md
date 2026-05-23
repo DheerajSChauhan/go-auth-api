@@ -34,6 +34,46 @@ Optional live reload with Air:
 air
 ```
 
+## API Examples
+
+Register a new user:
+
+```bash
+curl -X POST http://localhost:5000/register \
+	-H "Content-Type: application/json" \
+	-d '{"email":"test@example.com","password":"secret123"}'
+```
+
+Login and get a JWT:
+
+```bash
+curl -X POST http://localhost:5000/login \
+	-H "Content-Type: application/json" \
+	-d '{"email":"test@example.com","password":"secret123"}'
+```
+
+Use the returned token to call protected routes:
+
+```bash
+curl http://localhost:5000/api/files \
+	-H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+Expected auth response shape:
+
+```json
+{
+	"token": "eyJ...",
+	"user": {
+		"id": "66f...",
+		"email": "test@example.com",
+		"role": "user",
+		"createdAt": "2026-05-23T12:00:00Z",
+		"updatedAt": "2026-05-23T12:00:00Z"
+	}
+}
+```
+
 ## Available Routes
 
 - `GET /health` - health check
@@ -47,3 +87,4 @@ air
 
 - Environment variables are loaded automatically from `.env`.
 - The protected routes require a valid JWT in the request context.
+- Protected routes expect `Authorization: Bearer <token>`.
